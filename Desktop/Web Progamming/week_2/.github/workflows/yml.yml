@@ -1,4 +1,4 @@
-name: My Jekyll Build Workflow
+name: Build and Deploy
 
 on:
   push:
@@ -10,12 +10,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Build with Jekyll
-        run: |
-          # Replace this with your actual Jekyll build command
-          bundle exec jekyll build || true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Check if SCSS file exists
+      run: |
+        if [ -f "assets/css/style.scss" ]; then
+          echo "SCSS file exists."
+          echo "true" > scss_exists.txt
+        else
+          echo "SCSS file does not exist."
+          echo "false" > scss_exists.txt
+        fi
+
+    - name: Build with Jekyll (if SCSS file exists)
+      if: success() && steps.build.outputs.scss_exists == 'true'
+      run: |
+        # Your Jekyll build command here
+
+    - name: Deploy to GitHub Pages
+      if: success() && steps.build.outputs.scss_exists == 'true'
+      run: |
+        # Your deployment command here
+
+    - name: Set SCSS exists flag
+      run: |
+        if [ -f "assets/css/style.scss" ]; then
+          echo "true" >> scss_exists.txt
+        else
+          echo "false" >> scss_exists.txt
+        fi
