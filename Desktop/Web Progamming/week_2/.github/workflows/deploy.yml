@@ -1,0 +1,32 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - week_2
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Add your file
+      run: |
+        cp /path/to/your/local/Reg_form.html ./Reg_form.html
+
+    - name: Deploy to GitHub Pages
+      run: |
+        mkdir -p docs
+        cp Reg_form.html docs/
+        echo "Reg_form.html successfully added to docs directory."
+
+    - name: Push changes to 'week_2' branch
+      run: |
+        git config --global user.name "Imadkhan21"
+        git config --global user.email "21pwdsc0015@uetpeshawar.edu.pk"
+        git add docs/Reg_form.html
+        git commit -m "Add Reg_form.html to 'week_2' branch"
+        git push origin week_2
