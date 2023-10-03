@@ -13,20 +13,30 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Add your file
-      run: |
-        cp /path/to/your/local/Reg_form.html ./Reg_form.html
+    - name: Set up Ruby
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.7 # Use the appropriate Ruby version for your project
+
+    - name: Install Bundler
+      run: gem install bundler
+
+    - name: Install dependencies
+      run: bundle install
+
+    - name: Build with Jekyll
+      run: bundle exec jekyll build
 
     - name: Deploy to GitHub Pages
       run: |
         mkdir -p docs
-        cp Reg_form.html docs/
+        cp -r _site/* docs/
         echo "Reg_form.html successfully added to docs directory."
 
     - name: Push changes to 'week_2' branch
       run: |
         git config --global user.name "Imadkhan21"
         git config --global user.email "21pwdsc0015@uetpeshawar.edu.pk"
-        git add docs/Reg_form.html
+        git add docs/*
         git commit -m "Add Reg_form.html to 'week_2' branch"
         git push origin week_2
