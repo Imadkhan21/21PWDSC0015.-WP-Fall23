@@ -1,0 +1,21 @@
+name: My Jekyll Build Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build with Jekyll
+        run: |
+          # Replace this with your actual Jekyll build command
+          bundle exec jekyll build || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
